@@ -1,1 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://202.31.201.231:21/magic-conch?characterEncoding=UTF-8&serverTimezone=UTC
+    username: root
+    password: root
 
+server:
+  port: 80
