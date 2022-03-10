@@ -24,7 +24,7 @@ public class AccountController {
 
     @PostMapping("")
     public ResponseEntity register(
-            @RequestBody @ModelAttribute @Valid AccountDto accountDto,
+            @RequestBody @Valid AccountDto accountDto,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())

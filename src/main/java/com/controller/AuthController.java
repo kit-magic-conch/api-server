@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("")
     public ResponseEntity login(
-            @RequestBody @ModelAttribute @Validated(ValidationGroup.loginGroup.class) AccountDto accountDto,
+            @RequestBody @Validated(ValidationGroup.loginGroup.class) AccountDto accountDto,
             BindingResult bindingResult) {
 
         if (bindingResult.hasErrors())
