@@ -1,7 +1,31 @@
 package com.domain.entity;
 
-public class Report {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
+
+@Setter
+@Getter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "reports")
+public class Report extends BaseTimeEntity {
+    @Id
+    @Column(name = "report_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "diary_id", nullable = false)
     private Diary diary;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 }
