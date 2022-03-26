@@ -3,21 +3,19 @@ package com.controller;
 import com.domain.dto.AccountDto;
 import com.domain.dto.ValidationGroup;
 import com.service.AccountService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/session")
 public class AuthController {
 
     private final AccountService accountService;
-
-    public AuthController(AccountService accountService) {
-        this.accountService = accountService;
-    }
 
     @PostMapping("")
     public ResponseEntity login(

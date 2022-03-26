@@ -4,21 +4,17 @@ import com.domain.dto.AccountDto;
 import com.domain.entity.Account;
 import com.repository.AccountRepository;
 import com.service.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-
-    @Autowired
-    public AccountServiceImpl(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     @Override
     public void insertAccount(AccountDto accountDto) throws DataIntegrityViolationException {
