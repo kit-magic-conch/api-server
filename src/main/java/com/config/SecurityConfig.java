@@ -9,6 +9,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -30,6 +31,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/session")
                 .successHandler(authenticationSuccessHandler)
                 .failureHandler(authenticationFailureHandler)
+
+                .and()
+                .logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher("/session", "DELETE"))
 
                 .and()
                 .httpBasic();
