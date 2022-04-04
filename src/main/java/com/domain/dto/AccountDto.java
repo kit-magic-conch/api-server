@@ -14,10 +14,10 @@ import javax.validation.constraints.NotBlank;
 public class AccountDto {
     private Long id;
 
-    @NotBlank(groups = {ValidationGroup.loginGroup.class})
+    @NotBlank
     private String username;
 
-    @NotBlank(groups = {ValidationGroup.loginGroup.class})
+    @NotBlank
     private String password;
 
     @NotBlank
