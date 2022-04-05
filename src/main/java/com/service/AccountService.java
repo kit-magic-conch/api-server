@@ -5,5 +5,4 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 public interface AccountService {
     void insertAccount(AccountDto accountDto) throws DataIntegrityViolationException;
-    boolean isValidLoginInfo(AccountDto accountDto);
 }
