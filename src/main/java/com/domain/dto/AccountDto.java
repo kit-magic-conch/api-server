@@ -5,7 +5,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
@@ -25,10 +24,6 @@ public class AccountDto {
     @NotBlank
     private String nickname;
 
-    @NotBlank
-    @Email
-    private String email;
-
     public String encodePassword(PasswordEncoder passwordEncoder) {
         return password = passwordEncoder.encode(password);
     }
@@ -39,7 +34,6 @@ public class AccountDto {
                 .username(username)
                 .password(password)
                 .nickname(nickname)
-                .email(email)
                 .build();
     }
 }

@@ -26,7 +26,4 @@ public class Account extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String nickname;
-
-    @Column(nullable = false)
-    private String email;
 }
