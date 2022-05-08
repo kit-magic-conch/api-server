@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.StandardCharsets;
 
@@ -37,11 +38,12 @@ class AuthenticationTest {
     @DisplayName("'user' 로그인 성공")
     @WithAnonymousUser
     void loginSuccess() throws Exception {
-        AccountDto accountDto = AccountDto.builder()
-                .username("user")
-                .password("pw")
-                .build();
-        String content = objectMapper.writeValueAsString(accountDto);
+//        AccountDto accountDto = AccountDto.builder()
+//                .username("user")
+//                .password("pw")
+//                .build();
+//        String content = objectMapper.writeValueAsString(accountDto);
+        String content = "{\"username\":\"user\",\"password\":\"pw\"}";
 
         mockMvc.perform(post("/session")
                         .content(content)
@@ -58,11 +60,12 @@ class AuthenticationTest {
     @DisplayName("'user' 로그인 실패")
     @WithAnonymousUser
     void loginFailure() throws Exception {
-        AccountDto accountDto = AccountDto.builder()
-                .username("user")
-                .password("pwd")
-                .build();
-        String content = objectMapper.writeValueAsString(accountDto);
+//        AccountDto accountDto = AccountDto.builder()
+//                .username("user")
+//                .password("pwd")
+//                .build();
+//        String content = objectMapper.writeValueAsString(accountDto);
+        String content = "{\"username\":\"user\",\"password\":\"pwd\"}";
 
         mockMvc.perform(post("/session")
                         .content(content)
@@ -104,5 +107,18 @@ class AuthenticationTest {
 
         mockMvc.perform(get("/hello"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("principal 정보")
+    @WithUserDetails
+    void getPrincipal() throws Exception {
+        MvcResult result = mockMvc.perform(get("/session"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        AccountDto accountDto = objectMapper.readValue(result.getResponse().getContentAsString(), AccountDto.class);
+        assertEquals("user", accountDto.getUsername(), "username이 일치하지 않음");
+        assertEquals("nick", accountDto.getNickname(), "nickname이 일치하지 않음");
     }
 }
