@@ -1,11 +1,13 @@
 package com.domain;
 
 import com.domain.entity.Account;
+import lombok.Getter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collections;
 
+@Getter
 public class CustomUser extends User {
     private final Account account;
 
