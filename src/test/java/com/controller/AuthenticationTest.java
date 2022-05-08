@@ -14,14 +14,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 
 import java.nio.charset.StandardCharsets;
 
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -31,8 +32,8 @@ class AuthenticationTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+//    @Autowired
+//    private ObjectMapper objectMapper;
 
     @Test
     @DisplayName("'user' 로그인 성공")
@@ -113,12 +114,9 @@ class AuthenticationTest {
     @DisplayName("principal 정보")
     @WithUserDetails
     void getPrincipal() throws Exception {
-        MvcResult result = mockMvc.perform(get("/session"))
+        mockMvc.perform(get("/session"))
                 .andExpect(status().isOk())
-                .andReturn();
-
-        AccountDto accountDto = objectMapper.readValue(result.getResponse().getContentAsString(), AccountDto.class);
-        assertEquals("user", accountDto.getUsername(), "username이 일치하지 않음");
-        assertEquals("nick", accountDto.getNickname(), "nickname이 일치하지 않음");
+                .andExpect(jsonPath("$.username", is("user")))
+                .andExpect(jsonPath("$.nickname", is("nick")));
     }
 }
