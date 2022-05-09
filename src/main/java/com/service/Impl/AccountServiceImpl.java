@@ -24,7 +24,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public boolean existsId(String username) {
-        return accountRepository.findByUsername(username).isPresent();
+        return accountRepository.existsByUsername(username);
     }
 
     @Override
