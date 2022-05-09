@@ -38,7 +38,7 @@ public class Diary extends BaseTimeEntity {
     @Column(nullable = false)
     private String text;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PrivacyType privacy;
 
