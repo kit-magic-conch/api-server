@@ -35,4 +35,9 @@ public class AccountController {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
+
+    @GetMapping("/{username}/exists")
+    public boolean existsId(@PathVariable String username) {
+        return accountService.existsId(username);
+    }
 }

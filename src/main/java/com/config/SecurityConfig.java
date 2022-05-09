@@ -23,6 +23,7 @@ public class SecurityConfig {
         http
                 .authorizeRequests()
                 .antMatchers("/accounts").permitAll()
+                .antMatchers("/accounts/*/exists").permitAll()
                 .anyRequest().authenticated();
 
         http

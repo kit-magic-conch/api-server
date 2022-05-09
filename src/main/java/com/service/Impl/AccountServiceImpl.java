@@ -20,4 +20,9 @@ public class AccountServiceImpl implements AccountService {
         accountDto.encodePassword(passwordEncoder);
         accountRepository.save(accountDto.toEntity());
     }
+
+    @Override
+    public boolean existsId(String username) {
+        return accountRepository.findByUsername(username).isPresent();
+    }
 }
