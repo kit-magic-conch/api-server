@@ -32,4 +32,10 @@ public class AccountServiceImpl implements AccountService {
         account.setNickname(nickname);
         accountRepository.save(account);
     }
+
+    @Override
+    public void updatePassword(Account account, String password) {
+        account.setPassword(passwordEncoder.encode(password));
+        accountRepository.save(account);
+    }
 }

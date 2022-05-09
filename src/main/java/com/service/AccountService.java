@@ -10,4 +10,6 @@ public interface AccountService {
     boolean existsId(String username);
 
     void updateNickname(Account account, String nickname);
+
+    void updatePassword(Account account, String password);
 }

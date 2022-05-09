@@ -47,4 +47,9 @@ public class AccountController {
     public void updateNickname(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
         accountService.updateNickname(customUser.getAccount(), accountDto.getNickname());
     }
+
+    @PatchMapping("/password")
+    public void updatePassword(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
+        accountService.updatePassword(customUser.getAccount(), accountDto.getPassword());
+    }
 }
