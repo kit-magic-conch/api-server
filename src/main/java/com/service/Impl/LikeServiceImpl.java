@@ -7,6 +7,9 @@ import com.repository.LikeRepository;
 import com.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityNotFoundException;
 
 @RequiredArgsConstructor
 @Service
@@ -22,5 +25,18 @@ public class LikeServiceImpl implements LikeService {
                 .diary(diaryRepository.findById(diaryId).get())
                 .build();
         likeRepository.save(like);
+    }
+
+    @Override
+    @Transactional
+    public void deleteLike(Account account, Long diaryId) throws EntityNotFoundException {
+        Integer rowCnt = likeRepository.deleteByAccountAndDiaryId(account, diaryId);
+        if (rowCnt == 0)
+            throw new EntityNotFoundException();
+    }
+
+    @Override
+    public Long countLikeByDiaryId(Long diaryId) {
+        return likeRepository.countByDiaryId(diaryId);
     }
 }
