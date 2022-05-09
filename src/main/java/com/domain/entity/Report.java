@@ -14,7 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "reports")
+@Table(name = "reports", uniqueConstraints = @UniqueConstraint(columnNames = { "diary_id", "account_id" }))
 public class Report extends BaseTimeEntity {
     @Id
     @Column(name = "report_id")
