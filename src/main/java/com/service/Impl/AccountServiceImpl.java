@@ -1,6 +1,7 @@
 package com.service.Impl;
 
 import com.domain.dto.AccountDto;
+import com.domain.entity.Account;
 import com.repository.AccountRepository;
 import com.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -24,5 +25,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean existsId(String username) {
         return accountRepository.findByUsername(username).isPresent();
+    }
+
+    @Override
+    public void updateNickname(Account account, String nickname) {
+        account.setNickname(nickname);
+        accountRepository.save(account);
     }
 }

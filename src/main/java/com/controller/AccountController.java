@@ -1,11 +1,13 @@
 package com.controller;
 
+import com.domain.CustomUser;
 import com.domain.dto.AccountDto;
 import com.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +41,10 @@ public class AccountController {
     @GetMapping("/{username}/exists")
     public boolean existsId(@PathVariable String username) {
         return accountService.existsId(username);
+    }
+
+    @PatchMapping("/nickname")
+    public void updateNickname(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
+        accountService.updateNickname(customUser.getAccount(), accountDto.getNickname());
     }
 }
