@@ -9,6 +9,8 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -27,11 +29,11 @@ public class Diary extends BaseTimeEntity {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "voice_id", nullable = false)
     private MediaFile voice;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "photo_id")
     private MediaFile photo;
 
@@ -47,4 +49,13 @@ public class Diary extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer feeling;
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+    private List<Report> reports = new ArrayList<>();
+
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+    private List<Tag> tags = new ArrayList<>();
 }

@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -26,4 +28,13 @@ public class Account extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String nickname;
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<Diary> diaries = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<Like> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
+    private List<Report> reports = new ArrayList<>();
 }
