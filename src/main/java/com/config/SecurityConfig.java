@@ -3,6 +3,7 @@ package com.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,8 +23,8 @@ public class SecurityConfig {
 
         http
                 .authorizeRequests()
-                .antMatchers("/accounts").permitAll()
-                .antMatchers("/accounts/*/exists").permitAll()
+                .antMatchers(HttpMethod.POST, "/accounts").permitAll()
+                .antMatchers(HttpMethod.GET, "/accounts/*/exists").permitAll()
                 .anyRequest().authenticated();
 
         http
