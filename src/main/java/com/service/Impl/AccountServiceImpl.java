@@ -38,4 +38,9 @@ public class AccountServiceImpl implements AccountService {
         account.setPassword(passwordEncoder.encode(password));
         accountRepository.save(account);
     }
+
+    @Override
+    public void deleteAccount(Account account) {
+        accountRepository.delete(account);
+    }
 }

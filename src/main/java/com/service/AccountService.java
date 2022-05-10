@@ -12,4 +12,6 @@ public interface AccountService {
     void updateNickname(Account account, String nickname);
 
     void updatePassword(Account account, String password);
+
+    void deleteAccount(Account account);
 }

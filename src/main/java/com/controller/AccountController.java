@@ -11,6 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RequiredArgsConstructor
@@ -51,5 +53,15 @@ public class AccountController {
     @PatchMapping("/password")
     public void updatePassword(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
         accountService.updatePassword(customUser.getAccount(), accountDto.getPassword());
+    }
+
+    @DeleteMapping("")
+    public void deleteAccount(
+            @AuthenticationPrincipal CustomUser customUser,
+            HttpServletRequest request
+    ) throws ServletException {
+
+        accountService.deleteAccount(customUser.getAccount());
+        request.logout();
     }
 }
