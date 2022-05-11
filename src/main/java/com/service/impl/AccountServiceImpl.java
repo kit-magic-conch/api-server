@@ -1,4 +1,4 @@
-package com.service.Impl;
+package com.service.impl;
 
 import com.domain.dto.AccountDto;
 import com.domain.entity.Account;

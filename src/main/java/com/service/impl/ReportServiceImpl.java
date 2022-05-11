@@ -1,4 +1,4 @@
-package com.service.Impl;
+package com.service.impl;
 
 import com.domain.entity.Account;
 import com.domain.entity.Report;

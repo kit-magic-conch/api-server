@@ -1,4 +1,4 @@
-package com.service.Impl;
+package com.service.impl;
 
 import com.domain.CustomUser;
 import com.repository.AccountRepository;
