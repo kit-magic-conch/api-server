@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "diaries")
+@Table(name = "diaries", uniqueConstraints = @UniqueConstraint(columnNames = { "account_id", "date" }))
 public class Diary extends BaseTimeEntity {
     @Id
     @Column(name = "diary_id")
@@ -26,11 +26,11 @@ public class Diary extends BaseTimeEntity {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "voice_id", nullable = false)
     private MediaFile voice;
 
-    @OneToOne(fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "photo_id")
     private MediaFile photo;
 
@@ -56,6 +56,6 @@ public class Diary extends BaseTimeEntity {
     private List<Report> reports = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 }
