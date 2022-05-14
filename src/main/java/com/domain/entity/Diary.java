@@ -1,10 +1,7 @@
 package com.domain.entity;
 
 import com.domain.PrivacyType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -50,12 +47,15 @@ public class Diary extends BaseTimeEntity {
     @Column(nullable = false)
     private Integer feeling;
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)
     private List<Tag> tags = new ArrayList<>();
 }

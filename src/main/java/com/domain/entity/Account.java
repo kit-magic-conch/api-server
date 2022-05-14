@@ -29,12 +29,15 @@ public class Account extends BaseTimeEntity {
     @Column(nullable = false)
     private String nickname;
 
+    @Builder.Default
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Diary> diaries = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Like> likes = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE)
     private List<Report> reports = new ArrayList<>();
 }
