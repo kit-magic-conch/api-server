@@ -1,7 +1,6 @@
 package com.controller;
 
 import com.domain.CustomUser;
-import com.domain.dto.DiaryDto;
 import com.service.LikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,11 +19,11 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("")
-    public ResponseEntity likeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestBody DiaryDto diaryDto) {
+    public ResponseEntity likeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            likeService.insertLike(customUser.getAccount(), diaryDto.getId());
+            likeService.insertLike(customUser.getAccount(), diaryId);
             return new ResponseEntity(
-                    likeService.countLikeByDiaryId(diaryDto.getId()),
+                    likeService.countLikeByDiaryId(diaryId),
                     HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
             // 이미 공감함
@@ -33,11 +32,11 @@ public class LikeController {
     }
 
     @DeleteMapping("")
-    public ResponseEntity unlikeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestBody DiaryDto diaryDto) {
+    public ResponseEntity unlikeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            likeService.deleteLike(customUser.getAccount(), diaryDto.getId());
+            likeService.deleteLike(customUser.getAccount(), diaryId);
             return new ResponseEntity(
-                    likeService.countLikeByDiaryId(diaryDto.getId()),
+                    likeService.countLikeByDiaryId(diaryId),
                     HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             // 공감한 기록 없음

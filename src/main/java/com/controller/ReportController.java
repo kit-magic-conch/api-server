@@ -1,17 +1,13 @@
 package com.controller;
 
 import com.domain.CustomUser;
-import com.domain.dto.DiaryDto;
 import com.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -21,9 +17,9 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping("")
-    public ResponseEntity reportDiary(@AuthenticationPrincipal CustomUser customUser, @RequestBody DiaryDto diaryDto) {
+    public ResponseEntity reportDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            reportService.insertReport(customUser.getAccount(), diaryDto.getId());
+            reportService.insertReport(customUser.getAccount(), diaryId);
             // TODO: 신고 누적 시 처리
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {
