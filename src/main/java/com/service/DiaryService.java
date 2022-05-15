@@ -10,4 +10,6 @@ public interface DiaryService {
     FeelingListDto getFeelingsInYearMonth(Account account, int year, int month);
 
     void insertDiary(Long accountId, DiaryDto diaryDto) throws IOException;
+    void deleteDiary(Long diaryId);
+
 }

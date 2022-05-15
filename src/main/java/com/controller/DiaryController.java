@@ -42,4 +42,9 @@ public class DiaryController {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteDiary(@PathVariable("id") Long diaryId) {
+        diaryService.deleteDiary(diaryId);
+    }
 }

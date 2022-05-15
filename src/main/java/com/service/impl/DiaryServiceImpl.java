@@ -87,4 +87,9 @@ public class DiaryServiceImpl implements DiaryService {
                 .fileType(fileType)
                 .build();
     }
+
+    @Override
+    public void deleteDiary(Long diaryId) {
+        diaryRepository.deleteById(diaryId);
+    }
 }
