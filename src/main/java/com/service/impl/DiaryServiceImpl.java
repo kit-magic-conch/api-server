@@ -1,6 +1,7 @@
 package com.service.impl;
 
 import com.domain.FileType;
+import com.domain.PrivacyType;
 import com.domain.dto.DiaryDto;
 import com.domain.dto.FeelingListDto;
 import com.domain.entity.Account;
@@ -9,6 +10,7 @@ import com.domain.entity.MediaFile;
 import com.domain.entity.Tag;
 import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
+import com.repository.TagRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -25,6 +31,7 @@ public class DiaryServiceImpl implements DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
 
     @Override
     public FeelingListDto getFeelingsInYearMonth(Account account, int year, int month) {
@@ -67,6 +74,32 @@ public class DiaryServiceImpl implements DiaryService {
                     .forEach(diary.getTags()::add);
         }
 
+        diaryRepository.save(diary);
+    }
+
+    @Override
+    public void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto) throws IOException {
+        Diary diary = diaryRepository.findById(diaryId)
+                .orElseThrow(()-> new NoSuchElementException("No diary"));
+
+        if (diary.getAccount().getId() != accountId) {
+            throw new IllegalArgumentException();
+        }
+
+        diary.setPhoto(createMediaFile(diaryDto.getPhoto(), FileType.PHOTO));
+        diary.setText(diaryDto.getText());
+        diary.setPrivacy(diaryDto.getPrivacy());
+        diary.setFeeling(diaryDto.getFeeling());
+        diary.getTags().clear();
+        if (diaryDto.getTags() != null) {
+            diaryDto.getTags()
+                    .stream()
+                    .map(tagName -> Tag.builder()
+                            .diary(diary)
+                            .name(tagName)
+                            .build())
+                    .forEach(diary.getTags()::add);
+        }
         diaryRepository.save(diary);
     }
 

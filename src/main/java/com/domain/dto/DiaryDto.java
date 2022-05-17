@@ -20,18 +20,18 @@ public class DiaryDto {
 
     private MultipartFile photo;
 
-    @NotBlank
+    @NotBlank(groups = UpdateValidationGroup.class)
     private String text;
 
-    @NotNull
+    @NotNull(groups = UpdateValidationGroup.class)
     private PrivacyType privacy;
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
-    @NotNull
-    @Range(min = 1, max = 5)
+    @NotNull(groups = UpdateValidationGroup.class)
+    @Range(min = 1, max = 5, groups = UpdateValidationGroup.class)
     private Integer feeling;
 
     private List<String> tags;

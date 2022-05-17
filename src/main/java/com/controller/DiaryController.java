@@ -3,16 +3,20 @@ package com.controller;
 import com.domain.CustomUser;
 import com.domain.dto.DiaryDto;
 import com.domain.dto.FeelingListDto;
+import com.domain.dto.UpdateValidationGroup;
+import com.domain.entity.Diary;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @RestController
@@ -42,6 +46,29 @@ public class DiaryController {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
+//
+//    @GetMapping("/{id}")
+//    public void editDiary()
+
+    @PatchMapping("/{id}")
+    public ResponseEntity updateDiary(@PathVariable("id") Long diaryId,
+                                      @AuthenticationPrincipal CustomUser customUser,
+                                      @ModelAttribute @Validated(UpdateValidationGroup.class) DiaryDto diaryDto) {
+
+        try {
+            diaryService.updateDiary(customUser.getAccount().getId(), diaryId, diaryDto);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (IOException e) {
+            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
+        } finally {
+            return new ResponseEntity(HttpStatus.OK);
+        }
+    }
+
+
 
     @DeleteMapping("/{id}")
     public void deleteDiary(@PathVariable("id") Long diaryId) {

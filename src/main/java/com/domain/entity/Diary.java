@@ -56,6 +56,6 @@ public class Diary extends BaseTimeEntity {
     private List<Report> reports = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "diary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Tag> tags = new ArrayList<>();
 }
