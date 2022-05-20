@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -53,14 +54,11 @@ public class DiaryController {
 
         try {
             diaryService.updateDiary(customUser.getAccountId(), diaryId, diaryDto);
-        } catch (IllegalArgumentException e) {
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (AccessDeniedException e) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         } catch (NoSuchElementException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
-        } catch (IOException e) {
-            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
-        } finally {
-            return new ResponseEntity(HttpStatus.OK);
         }
     }
 

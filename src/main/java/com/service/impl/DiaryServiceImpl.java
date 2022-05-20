@@ -10,13 +10,13 @@ import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -71,15 +71,13 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto) throws IOException {
-        Diary diary = diaryRepository.findById(diaryId)
-                .orElseThrow(()-> new NoSuchElementException("No diary"));
+    public void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto) {
+        Diary diary = diaryRepository.findById(diaryId).get();
 
         if (diary.getAccount().getId() != accountId) {
-            throw new IllegalArgumentException();
+            throw new AccessDeniedException("Access to this diary is denied.");
         }
 
-        diary.setPhoto(createMediaFile(diaryDto.getPhoto(), FileType.PHOTO));
         diary.setText(diaryDto.getText());
         diary.setPrivacy(diaryDto.getPrivacy());
         diary.setFeeling(diaryDto.getFeeling());

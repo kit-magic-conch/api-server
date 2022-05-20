@@ -10,7 +10,7 @@ public interface DiaryService {
 
     void insertDiary(Long accountId, DiaryDto diaryDto) throws IOException;
 
-    void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto) throws IOException;
+    void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto);
 
     void deleteDiary(Long diaryId);
 }
