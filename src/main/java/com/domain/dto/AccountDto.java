@@ -21,10 +21,10 @@ public class AccountDto {
     private String username;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @NotBlank
+    @NotBlank(groups = UpdateValidationGroup.OnlyPassword.class)
     private String password;
 
-    @NotBlank
+    @NotBlank(groups = UpdateValidationGroup.OnlyNickname.class)
     private String nickname;
 
     public AccountDto(Account account) {
