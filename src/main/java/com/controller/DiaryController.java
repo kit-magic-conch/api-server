@@ -50,7 +50,7 @@ public class DiaryController {
     @PatchMapping("/{id}")
     public ResponseEntity updateDiary(@PathVariable("id") Long diaryId,
                                       @AuthenticationPrincipal CustomUser customUser,
-                                      @ModelAttribute @Validated(UpdateValidationGroup.class) DiaryDto diaryDto) {
+                                      @RequestBody @Validated(UpdateValidationGroup.class) DiaryDto diaryDto) {
 
         try {
             diaryService.updateDiary(customUser.getAccountId(), diaryId, diaryDto);
