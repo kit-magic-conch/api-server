@@ -1,7 +1,9 @@
 package com.service.impl;
 
 import com.domain.FileType;
+import com.domain.PrivacyType;
 import com.domain.dto.DiaryDto;
+import com.domain.dto.DiaryInfoDto;
 import com.domain.dto.FeelingListDto;
 import com.domain.entity.Diary;
 import com.domain.entity.MediaFile;
@@ -121,5 +123,16 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         diaryRepository.delete(diary);
+    }
+
+    @Override
+    public DiaryInfoDto findDiary(Long accountId, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId).get();
+
+        if (diary.getAccount().getId() != accountId && diary.getPrivacy() == PrivacyType.PRIVATE) {
+            throw new AccessDeniedException("Access to this diary is denied.");
+        }
+
+        return new DiaryInfoDto(diary, accountId);
     }
 }
