@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-@Component
+//@Component
 @Order(value = Ordered.HIGHEST_PRECEDENCE)
 @WebFilter
 public class LoggingFilter extends OncePerRequestFilter {
