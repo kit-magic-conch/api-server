@@ -63,7 +63,15 @@ public class DiaryController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDiary(@PathVariable("id") Long diaryId) {
-        diaryService.deleteDiary(diaryId);
+    public ResponseEntity deleteDiary(@PathVariable("id") Long diaryId,
+                                      @AuthenticationPrincipal CustomUser customUser) {
+        try {
+            diaryService.deleteDiary(customUser.getAccountId(), diaryId);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (AccessDeniedException e) {
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 }

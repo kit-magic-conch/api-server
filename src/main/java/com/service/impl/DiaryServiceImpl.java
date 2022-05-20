@@ -113,7 +113,13 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public void deleteDiary(Long diaryId) {
-        diaryRepository.deleteById(diaryId);
+    public void deleteDiary(Long accountId, Long diaryId) {
+        Diary diary = diaryRepository.findById(diaryId).get();
+
+        if (diary.getAccount().getId() != accountId) {
+            throw new AccessDeniedException("Access to this diary is denied.");
+        }
+
+        diaryRepository.delete(diary);
     }
 }

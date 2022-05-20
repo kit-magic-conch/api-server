@@ -12,5 +12,5 @@ public interface DiaryService {
 
     void updateDiary(Long accountId, Long diaryId, DiaryDto diaryDto);
 
-    void deleteDiary(Long diaryId);
+    void deleteDiary(Long accountId, Long diaryId);
 }
