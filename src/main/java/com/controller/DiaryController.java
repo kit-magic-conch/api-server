@@ -4,7 +4,6 @@ import com.domain.CustomUser;
 import com.domain.dto.DiaryDto;
 import com.domain.dto.FeelingListDto;
 import com.domain.dto.UpdateValidationGroup;
-import com.domain.entity.Diary;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -31,13 +30,13 @@ public class DiaryController {
             @RequestParam int year,
             @RequestParam int month) {
 
-        return diaryService.getFeelingsInYearMonth(customUser.getAccount(), year, month);
+        return diaryService.getFeelingsInYearMonth(customUser.getAccountId(), year, month);
     }
 
     @PostMapping("")
     public ResponseEntity saveDiary(@AuthenticationPrincipal CustomUser customUser, @ModelAttribute @Valid DiaryDto diaryDto) {
         try {
-            diaryService.insertDiary(customUser.getAccount().getId(), diaryDto);
+            diaryService.insertDiary(customUser.getAccountId(), diaryDto);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (IOException e) {
             return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -46,9 +45,6 @@ public class DiaryController {
             return new ResponseEntity(HttpStatus.CONFLICT);
         }
     }
-//
-//    @GetMapping("/{id}")
-//    public void editDiary()
 
     @PatchMapping("/{id}")
     public ResponseEntity updateDiary(@PathVariable("id") Long diaryId,
@@ -56,7 +52,7 @@ public class DiaryController {
                                       @ModelAttribute @Validated(UpdateValidationGroup.class) DiaryDto diaryDto) {
 
         try {
-            diaryService.updateDiary(customUser.getAccount().getId(), diaryId, diaryDto);
+            diaryService.updateDiary(customUser.getAccountId(), diaryId, diaryDto);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         } catch (NoSuchElementException e) {
@@ -67,8 +63,6 @@ public class DiaryController {
             return new ResponseEntity(HttpStatus.OK);
         }
     }
-
-
 
     @DeleteMapping("/{id}")
     public void deleteDiary(@PathVariable("id") Long diaryId) {

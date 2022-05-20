@@ -28,19 +28,26 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void updateNickname(Account account, String nickname) {
+    public void updateNickname(Long accountId, String nickname) {
+        Account account = accountRepository.findById(accountId).get();
         account.setNickname(nickname);
         accountRepository.save(account);
     }
 
     @Override
-    public void updatePassword(Account account, String password) {
+    public void updatePassword(Long accountId, String password) {
+        Account account = accountRepository.findById(accountId).get();
         account.setPassword(passwordEncoder.encode(password));
         accountRepository.save(account);
     }
 
     @Override
-    public void deleteAccount(Account account) {
-        accountRepository.delete(account);
+    public void deleteAccount(Long accountId) {
+        accountRepository.deleteById(accountId);
+    }
+
+    @Override
+    public AccountDto getAccountDtoById(Long accountId) {
+        return new AccountDto(accountRepository.findById(accountId).get());
     }
 }

@@ -1,7 +1,7 @@
 package com.service.impl;
 
-import com.domain.entity.Account;
 import com.domain.entity.Like;
+import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
 import com.repository.LikeRepository;
 import com.service.LikeService;
@@ -17,11 +17,12 @@ public class LikeServiceImpl implements LikeService {
 
     private final DiaryRepository diaryRepository;
     private final LikeRepository likeRepository;
+    private final AccountRepository accountRepository;
 
     @Override
-    public void insertLike(Account account, Long diaryId) {
+    public void insertLike(Long accountId, Long diaryId) {
         Like like = Like.builder()
-                .account(account)
+                .account(accountRepository.findById(accountId).get())
                 .diary(diaryRepository.findById(diaryId).get())
                 .build();
         likeRepository.save(like);
@@ -29,8 +30,8 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     @Transactional
-    public void deleteLike(Account account, Long diaryId) throws EntityNotFoundException {
-        Integer rowCnt = likeRepository.deleteByAccountAndDiaryId(account, diaryId);
+    public void deleteLike(Long accountId, Long diaryId) throws EntityNotFoundException {
+        Integer rowCnt = likeRepository.deleteByAccountIdAndDiaryId(accountId, diaryId);
         if (rowCnt == 0)
             throw new EntityNotFoundException();
     }

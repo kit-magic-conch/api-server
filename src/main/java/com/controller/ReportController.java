@@ -19,7 +19,7 @@ public class ReportController {
     @PostMapping("")
     public ResponseEntity reportDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            reportService.insertReport(customUser.getAccount(), diaryId);
+            reportService.insertReport(customUser.getAccountId(), diaryId);
             // TODO: 신고 누적 시 처리
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (DataIntegrityViolationException e) {

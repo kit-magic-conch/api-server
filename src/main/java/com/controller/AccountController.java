@@ -47,12 +47,12 @@ public class AccountController {
 
     @PatchMapping("/nickname")
     public void updateNickname(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
-        accountService.updateNickname(customUser.getAccount(), accountDto.getNickname());
+        accountService.updateNickname(customUser.getAccountId(), accountDto.getNickname());
     }
 
     @PatchMapping("/password")
     public void updatePassword(@AuthenticationPrincipal CustomUser customUser, @RequestBody AccountDto accountDto) {
-        accountService.updatePassword(customUser.getAccount(), accountDto.getPassword());
+        accountService.updatePassword(customUser.getAccountId(), accountDto.getPassword());
     }
 
     @DeleteMapping("")
@@ -61,7 +61,7 @@ public class AccountController {
             HttpServletRequest request
     ) throws ServletException {
 
-        accountService.deleteAccount(customUser.getAccount());
+        accountService.deleteAccount(customUser.getAccountId());
         request.logout();
     }
 }

@@ -9,11 +9,11 @@ import java.util.Collections;
 
 @Getter
 public class CustomUser extends User {
-    private final Account account;
+    private final Long accountId;
 
     public CustomUser(Account account) {
         super(account.getUsername(), account.getPassword(),
                 Collections.unmodifiableList(AuthorityUtils.createAuthorityList("ROLE_USER")));
-        this.account = account;
+        this.accountId = account.getId();
     }
 }

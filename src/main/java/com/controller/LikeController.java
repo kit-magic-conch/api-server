@@ -21,7 +21,7 @@ public class LikeController {
     @PostMapping("")
     public ResponseEntity likeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            likeService.insertLike(customUser.getAccount(), diaryId);
+            likeService.insertLike(customUser.getAccountId(), diaryId);
             return new ResponseEntity(
                     likeService.countLikeByDiaryId(diaryId),
                     HttpStatus.CREATED);
@@ -34,7 +34,7 @@ public class LikeController {
     @DeleteMapping("")
     public ResponseEntity unlikeDiary(@AuthenticationPrincipal CustomUser customUser, @RequestParam Long diaryId) {
         try {
-            likeService.deleteLike(customUser.getAccount(), diaryId);
+            likeService.deleteLike(customUser.getAccountId(), diaryId);
             return new ResponseEntity(
                     likeService.countLikeByDiaryId(diaryId),
                     HttpStatus.OK);

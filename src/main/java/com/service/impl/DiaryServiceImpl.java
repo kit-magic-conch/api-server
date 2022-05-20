@@ -1,16 +1,13 @@
 package com.service.impl;
 
 import com.domain.FileType;
-import com.domain.PrivacyType;
 import com.domain.dto.DiaryDto;
 import com.domain.dto.FeelingListDto;
-import com.domain.entity.Account;
 import com.domain.entity.Diary;
 import com.domain.entity.MediaFile;
 import com.domain.entity.Tag;
 import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
-import com.repository.TagRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -31,14 +25,13 @@ public class DiaryServiceImpl implements DiaryService {
 
     private final DiaryRepository diaryRepository;
     private final AccountRepository accountRepository;
-    private final TagRepository tagRepository;
 
     @Override
-    public FeelingListDto getFeelingsInYearMonth(Account account, int year, int month) {
+    public FeelingListDto getFeelingsInYearMonth(Long accountId, int year, int month) {
         FeelingListDto feelingListDto = new FeelingListDto();
 
         diaryRepository
-                .findByAccountAndYearMonth(account, year, month)
+                .findByAccountIdAndYearMonth(accountId, year, month)
                 .forEach((diary) -> {
                     int day = diary.getDate().getDayOfMonth();
                     feelingListDto.getIds()[day] = diary.getId();
