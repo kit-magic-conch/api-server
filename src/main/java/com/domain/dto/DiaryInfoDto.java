@@ -25,7 +25,11 @@ public class DiaryInfoDto {
 
     public DiaryInfoDto(Diary diary, Long principalId) {
         this.voiceId = diary.getVoice().getId();
-        this.photoId = diary.getPhoto().getId();
+        if (diary.getPhoto() == null) {
+            this.photoId = null;
+        } else {
+            this.photoId = diary.getPhoto().getId();
+        }
 
         this.text = diary.getText();
         this.privacy = diary.getPrivacy();
