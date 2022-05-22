@@ -5,6 +5,11 @@ spring:
     username: root
     password: root
 
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true
+
 server:
   port: 80
 

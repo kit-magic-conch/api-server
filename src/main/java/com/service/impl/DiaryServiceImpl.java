@@ -12,6 +12,7 @@ import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -134,5 +137,13 @@ public class DiaryServiceImpl implements DiaryService {
         }
 
         return new DiaryInfoDto(diary, accountId);
+    }
+
+    @Override
+    public List<DiaryInfoDto> findDiariesByKeyAndPage(String key, Pageable pageable, Long accountId) {
+        return diaryRepository.findDiariesPermittedByTagsContains(accountId, key, pageable)
+                .stream()
+                .map(diary -> new DiaryInfoDto(diary, accountId))
+                .collect(Collectors.toList());
     }
 }

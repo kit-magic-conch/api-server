@@ -8,6 +8,9 @@ import com.domain.dto.UpdateValidationGroup;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.*;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -47,6 +51,15 @@ public class DiaryController {
         } catch (NoSuchElementException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("")
+    public List<DiaryInfoDto> getDiariesByKeyAndPage(
+            @RequestParam(required = false) String key,
+            @PageableDefault(sort = "createdDateTime", direction = Sort.Direction.DESC) Pageable pageable,
+            @AuthenticationPrincipal CustomUser customUser) {
+
+        return diaryService.findDiariesByKeyAndPage(key, pageable, customUser.getAccountId());
     }
 
     @PostMapping("")
