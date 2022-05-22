@@ -6,11 +6,9 @@ import com.domain.dto.DiaryInfoDto;
 import com.domain.dto.FeelingListDto;
 import com.domain.dto.UpdateValidationGroup;
 import com.service.DiaryService;
-import com.util.MultiValueMapMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,15 +35,13 @@ public class DiaryController {
         return diaryService.getFeelingsInYearMonth(customUser.getAccountId(), year, month);
     }
 
-    @GetMapping(value = "/{id}", produces = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping("/{id}")
     public ResponseEntity getDiary(@PathVariable("id") Long diaryId,
                                    @AuthenticationPrincipal CustomUser customUser) {
 
         try {
             DiaryInfoDto diaryInfoDto = diaryService.findDiary(customUser.getAccountId(), diaryId);
-            return new ResponseEntity<>(
-                    MultiValueMapMapper.toMultiValueMap(diaryInfoDto),
-                    HttpStatus.OK);
+            return new ResponseEntity(diaryInfoDto, HttpStatus.OK);
         } catch (AccessDeniedException e) {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         } catch (NoSuchElementException e) {

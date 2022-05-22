@@ -2,12 +2,9 @@ package com.domain.dto;
 
 import com.domain.PrivacyType;
 import com.domain.entity.Diary;
-import com.domain.entity.MediaFile;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.core.io.FileSystemResource;
 
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,8 +12,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class DiaryInfoDto {
-    private FileSystemResource voice;
-    private FileSystemResource photo;
+    private Long voiceId;
+    private Long photoId;
     private String text;
     private PrivacyType privacy;
     private LocalDate date;
@@ -27,8 +24,8 @@ public class DiaryInfoDto {
     private Boolean isLikedByPrincipal;
 
     public DiaryInfoDto(Diary diary, Long principalId) {
-        this.voice = convertMediaFileToFileSystemResource(diary.getVoice());
-        this.photo = convertMediaFileToFileSystemResource(diary.getPhoto());
+        this.voiceId = diary.getVoice().getId();
+        this.photoId = diary.getPhoto().getId();
 
         this.text = diary.getText();
         this.privacy = diary.getPrivacy();
@@ -45,15 +42,5 @@ public class DiaryInfoDto {
         this.isLikedByPrincipal = diary.getLikes()
                 .stream()
                 .anyMatch(like -> like.getAccount().getId() == principalId);
-    }
-
-    private static FileSystemResource convertMediaFileToFileSystemResource(MediaFile mediaFile) {
-        if (mediaFile == null)
-            return null;
-
-        return new FileSystemResource(Paths.get(
-                System.getProperty("catalina.base"),
-                mediaFile.getUuid(),
-                mediaFile.getFileName()));
     }
 }
