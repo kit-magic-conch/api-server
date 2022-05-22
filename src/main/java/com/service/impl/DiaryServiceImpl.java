@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.domain.EmotionRecogType;
 import com.domain.FileType;
 import com.domain.PrivacyType;
 import com.domain.dto.DiaryDto;
@@ -60,6 +61,8 @@ public class DiaryServiceImpl implements DiaryService {
                 .privacy(diaryDto.getPrivacy())
                 .date(diaryDto.getDate())
                 .feeling(diaryDto.getFeeling())
+                // TODO: 감정 분석한 결과 저장해야 함
+                .emotionRecogResult(EmotionRecogType.POSITIVE)
                 .build();
 
         if (diaryDto.getTags() != null) {

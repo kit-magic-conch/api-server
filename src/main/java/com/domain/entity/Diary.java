@@ -1,5 +1,6 @@
 package com.domain.entity;
 
+import com.domain.EmotionRecogType;
 import com.domain.PrivacyType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -46,6 +47,10 @@ public class Diary extends BaseTimeEntity {
 
     @Column(nullable = false)
     private Integer feeling;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private EmotionRecogType emotionRecogResult;
 
     @Builder.Default
     @OneToMany(mappedBy = "diary", cascade = CascadeType.REMOVE)

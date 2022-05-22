@@ -1,5 +1,6 @@
 package com.domain.dto;
 
+import com.domain.EmotionRecogType;
 import com.domain.PrivacyType;
 import com.domain.entity.Diary;
 import lombok.Getter;
@@ -18,6 +19,7 @@ public class DiaryInfoDto {
     private PrivacyType privacy;
     private LocalDate date;
     private Integer feeling;
+    private EmotionRecogType emotionRecogResult;
     private List<String> tags;
     private String accountNickname;
     private Integer likeCount;
@@ -35,6 +37,7 @@ public class DiaryInfoDto {
         this.privacy = diary.getPrivacy();
         this.date = diary.getDate();
         this.feeling = diary.getFeeling();
+        this.emotionRecogResult = diary.getEmotionRecogResult();
         this.accountNickname = diary.getAccount().getNickname();
         this.likeCount = diary.getLikes().size();
 
