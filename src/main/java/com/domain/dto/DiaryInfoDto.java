@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class DiaryInfoDto {
+    private Long diaryId;
     private Long voiceId;
     private Long photoId;
     private String text;
@@ -33,6 +34,7 @@ public class DiaryInfoDto {
             this.photoId = diary.getPhoto().getId();
         }
 
+        this.diaryId = diary.getId();
         this.text = diary.getText();
         this.privacy = diary.getPrivacy();
         this.date = diary.getDate();
