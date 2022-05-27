@@ -105,7 +105,7 @@ public class DiaryController {
         }
     }
 
-    @GetMapping("/emotionRecogResult")
+    @PostMapping("/emotionRecogResult")
     public EmotionRecogType getEmotionRecogResultFromModelServer(@RequestParam MultipartFile voice) throws IOException {
         return diaryService.getEmotionRecogResultFromModelServer(voice);
     }
