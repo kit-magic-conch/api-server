@@ -64,6 +64,9 @@ public class DiaryServiceImpl implements DiaryService {
         MediaFile voice = createMediaFile(diaryDto.getVoice(), FileType.VOICE);
         MediaFile photo = createMediaFile(diaryDto.getPhoto(), FileType.PHOTO);
 
+        File voiceFile = Paths.get(System.getProperty("catalina.base"), voice.getUuid(), voice.getFileName()).toFile();
+        EmotionRecogType emotionRecogResult = getEmotionRecogResultFromModelServer(voiceFile);
+
         Diary diary = Diary.builder()
                 .account(accountRepository.findById(accountId).get())
                 .voice(voice)
@@ -72,8 +75,7 @@ public class DiaryServiceImpl implements DiaryService {
                 .privacy(diaryDto.getPrivacy())
                 .date(diaryDto.getDate())
                 .feeling(diaryDto.getFeeling())
-                // TODO: 감정 분석한 결과 저장해야 함
-                .emotionRecogResult(EmotionRecogType.POSITIVE)
+                .emotionRecogResult(emotionRecogResult)
                 .build();
 
         if (diaryDto.getTags() != null) {
@@ -165,10 +167,19 @@ public class DiaryServiceImpl implements DiaryService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public EmotionRecogType getEmotionRecogResultFromModelServer(MultipartFile voice) throws IOException {
         File file = getFileFromUuidAndMultipartFile(UUID.randomUUID().toString(), voice);
         voice.transferTo(file);
 
+        EmotionRecogType result = getEmotionRecogResultFromModelServer(file);
+
+        file.delete();
+
+        return result;
+    }
+
+    private EmotionRecogType getEmotionRecogResultFromModelServer(File file) {
         MultiValueMap multiValueMap = new LinkedMultiValueMap();
         multiValueMap.add("audio", new FileSystemResource(file));
 
@@ -180,8 +191,6 @@ public class DiaryServiceImpl implements DiaryService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
-
-        file.delete();
 
         return EmotionRecogType.valueOf(result);
     }
