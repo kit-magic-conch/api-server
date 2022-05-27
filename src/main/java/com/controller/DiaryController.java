@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.domain.CustomUser;
+import com.domain.EmotionRecogType;
 import com.domain.dto.DiaryDto;
 import com.domain.dto.DiaryInfoDto;
 import com.domain.dto.FeelingListDto;
@@ -17,6 +18,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.*;
@@ -101,5 +103,10 @@ public class DiaryController {
         } catch (NoSuchElementException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/emotionRecogResult")
+    public EmotionRecogType getEmotionRecogResultFromModelServer(@RequestParam MultipartFile voice) throws IOException {
+        return diaryService.getEmotionRecogResultFromModelServer(voice);
     }
 }

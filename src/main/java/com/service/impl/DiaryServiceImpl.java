@@ -13,11 +13,19 @@ import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -28,6 +36,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class DiaryServiceImpl implements DiaryService {
+
+    @Value("${custom.model-server-host}")
+    private String modelServerHost;
 
     private final DiaryRepository diaryRepository;
     private final AccountRepository accountRepository;
@@ -108,16 +119,20 @@ public class DiaryServiceImpl implements DiaryService {
 
         String uuid = UUID.randomUUID().toString();
 
-        Path dirPath = Paths.get(System.getProperty("catalina.base"), uuid);
-        dirPath.toFile().mkdirs();
+        multipartFile.transferTo(getFileFromUuidAndMultipartFile(uuid, multipartFile));
 
-        multipartFile.transferTo(
-                Paths.get(dirPath.toString(), multipartFile.getOriginalFilename()).toFile());
         return MediaFile.builder()
                 .uuid(uuid)
                 .fileName(multipartFile.getOriginalFilename())
                 .fileType(fileType)
                 .build();
+    }
+
+    private File getFileFromUuidAndMultipartFile(String uuid, MultipartFile multipartFile) {
+        Path dirPath = Paths.get(System.getProperty("catalina.base"), uuid);
+        dirPath.toFile().mkdirs();
+
+        return Paths.get(dirPath.toString(), multipartFile.getOriginalFilename()).toFile();
     }
 
     @Override
@@ -148,5 +163,26 @@ public class DiaryServiceImpl implements DiaryService {
                 .stream()
                 .map(diary -> new DiaryInfoDto(diary, accountId))
                 .collect(Collectors.toList());
+    }
+
+    public EmotionRecogType getEmotionRecogResultFromModelServer(MultipartFile voice) throws IOException {
+        File file = getFileFromUuidAndMultipartFile(UUID.randomUUID().toString(), voice);
+        voice.transferTo(file);
+
+        MultiValueMap multiValueMap = new LinkedMultiValueMap();
+        multiValueMap.add("audio", new FileSystemResource(file));
+
+        String result = WebClient.create(modelServerHost)
+                .method(HttpMethod.GET)
+                .uri("/")
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .bodyValue(multiValueMap)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        file.delete();
+
+        return EmotionRecogType.valueOf(result);
     }
 }

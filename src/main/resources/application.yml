@@ -16,3 +16,6 @@ server:
 logging:
   level:
     com.filter: debug
+
+custom:
+  model-server-host: http://magic-conch-model:5000
