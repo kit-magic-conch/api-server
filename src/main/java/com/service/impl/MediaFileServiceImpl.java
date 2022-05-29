@@ -9,10 +9,7 @@ import com.repository.MediaFileRepository;
 import com.service.MediaFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +27,9 @@ public class MediaFileServiceImpl implements MediaFileService {
         MediaFile mediaFile = mediaFileRepository.findById(mediaFileId).get();
 
         Diary diary;
+
         HttpHeaders headers = new HttpHeaders();
+
         if (mediaFile.getFileType() == FileType.VOICE) {
             diary = diaryRepository.findByVoice(mediaFile).get();
             headers.setContentType(new MediaType("audio", "wav"));
@@ -38,6 +37,11 @@ public class MediaFileServiceImpl implements MediaFileService {
             diary = diaryRepository.findByPhoto(mediaFile).get();
             headers.setContentType(MediaType.IMAGE_JPEG);
         }
+
+        ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
+                .filename(mediaFile.getFileName())
+                .build();
+        headers.setContentDisposition(contentDisposition);
 
         if (diary.getAccount().getId() != accountId && diary.getPrivacy() == PrivacyType.PRIVATE) {
             throw new AccessDeniedException("Access to this diary is denied.");
