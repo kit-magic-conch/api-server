@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.config.CustomProperty;
 import com.domain.FileType;
 import com.domain.PrivacyType;
 import com.domain.entity.Diary;
@@ -21,6 +22,7 @@ public class MediaFileServiceImpl implements MediaFileService {
 
     private final MediaFileRepository mediaFileRepository;
     private final DiaryRepository diaryRepository;
+    private final CustomProperty customProperty;
 
     @Override
     public ResponseEntity findMediaFile(Long accountId, Long mediaFileId) {
@@ -48,7 +50,7 @@ public class MediaFileServiceImpl implements MediaFileService {
         }
 
         FileSystemResource resource = new FileSystemResource(Paths.get(
-                System.getProperty("catalina.base"),
+                customProperty.getFileSavePath(),
                 mediaFile.getUuid(),
                 mediaFile.getFileName()));
 

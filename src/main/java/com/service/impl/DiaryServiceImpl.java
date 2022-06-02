@@ -1,5 +1,6 @@
 package com.service.impl;
 
+import com.config.CustomProperty;
 import com.domain.EmotionRecogType;
 import com.domain.FileType;
 import com.domain.PrivacyType;
@@ -37,11 +38,9 @@ import java.util.stream.Collectors;
 @Service
 public class DiaryServiceImpl implements DiaryService {
 
-    @Value("${custom.model-server-host}")
-    private String modelServerHost;
-
     private final DiaryRepository diaryRepository;
     private final AccountRepository accountRepository;
+    private final CustomProperty customProperty;
 
     @Override
     public FeelingListDto getFeelingsInYearMonth(Long accountId, int year, int month) {
@@ -64,7 +63,7 @@ public class DiaryServiceImpl implements DiaryService {
         MediaFile voice = createMediaFile(diaryDto.getVoice(), FileType.VOICE);
         MediaFile photo = createMediaFile(diaryDto.getPhoto(), FileType.PHOTO);
 
-        File voiceFile = Paths.get(System.getProperty("catalina.base"), voice.getUuid(), voice.getFileName()).toFile();
+        File voiceFile = Paths.get(customProperty.getFileSavePath(), voice.getUuid(), voice.getFileName()).toFile();
         EmotionRecogType emotionRecogResult = getEmotionRecogResultFromModelServer(voiceFile);
 
         Diary diary = Diary.builder()
@@ -131,7 +130,7 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     private File getFileFromUuidAndMultipartFile(String uuid, MultipartFile multipartFile) {
-        Path dirPath = Paths.get(System.getProperty("catalina.base"), uuid);
+        Path dirPath = Paths.get(customProperty.getFileSavePath(), uuid);
         dirPath.toFile().mkdirs();
 
         return Paths.get(dirPath.toString(), multipartFile.getOriginalFilename()).toFile();
@@ -183,7 +182,7 @@ public class DiaryServiceImpl implements DiaryService {
         MultiValueMap multiValueMap = new LinkedMultiValueMap();
         multiValueMap.add("audio", new FileSystemResource(file));
 
-        String result = WebClient.create(modelServerHost)
+        String result = WebClient.create(customProperty.getModelServerHost())
                 .method(HttpMethod.GET)
                 .uri("/")
                 .contentType(MediaType.MULTIPART_FORM_DATA)

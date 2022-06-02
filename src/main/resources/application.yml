@@ -23,3 +23,4 @@ logging:
 
 custom:
   model-server-host: http://magic-conch-model:5000
+  file-save-path: C:\Users\DeepLearning_4\Desktop\마법의 소라고동\diary-files
