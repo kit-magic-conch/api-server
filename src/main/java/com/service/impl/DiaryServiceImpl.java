@@ -14,7 +14,6 @@ import com.repository.AccountRepository;
 import com.repository.DiaryRepository;
 import com.service.DiaryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
@@ -26,6 +25,9 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -59,16 +61,21 @@ public class DiaryServiceImpl implements DiaryService {
     }
 
     @Override
-    public void insertDiary(Long accountId, DiaryDto diaryDto) throws IOException {
+    public void insertDiary(Long accountId, DiaryDto diaryDto) throws IOException, UnsupportedAudioFileException {
         MediaFile voice = createMediaFile(diaryDto.getVoice(), FileType.VOICE);
         MediaFile photo = createMediaFile(diaryDto.getPhoto(), FileType.PHOTO);
 
         File voiceFile = Paths.get(customProperty.getFileSavePath(), voice.getUuid(), voice.getFileName()).toFile();
+
+        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(voiceFile);
+        double voiceDuration = audioInputStream.getFrameLength() / audioInputStream.getFormat().getFrameRate();
+
         EmotionRecogType emotionRecogResult = getEmotionRecogResultFromModelServer(voiceFile);
 
         Diary diary = Diary.builder()
                 .account(accountRepository.findById(accountId).get())
                 .voice(voice)
+                .voiceDuration(voiceDuration)
                 .photo(photo)
                 .text(diaryDto.getText())
                 .privacy(diaryDto.getPrivacy())

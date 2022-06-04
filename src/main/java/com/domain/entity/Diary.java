@@ -31,6 +31,9 @@ public class Diary extends BaseTimeEntity {
     @JoinColumn(name = "voice_id", nullable = false)
     private MediaFile voice;
 
+    @Column(nullable = false)
+    private Double voiceDuration;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, orphanRemoval = true)
     @JoinColumn(name = "photo_id")
     private MediaFile photo;

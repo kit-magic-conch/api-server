@@ -20,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.validation.Valid;
 import java.io.*;
 import java.util.List;
@@ -69,6 +70,8 @@ public class DiaryController {
         try {
             diaryService.insertDiary(customUser.getAccountId(), diaryDto);
             return new ResponseEntity(HttpStatus.CREATED);
+        } catch (UnsupportedAudioFileException e) {
+            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IOException e) {
             return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (DataIntegrityViolationException e) {

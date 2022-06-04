@@ -31,7 +31,4 @@ public class MediaFile {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FileType fileType;
-
-    @Column(nullable = true)
-    private int fileLength;
 }
