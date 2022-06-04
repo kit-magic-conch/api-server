@@ -71,9 +71,11 @@ public class DiaryController {
             diaryService.insertDiary(customUser.getAccountId(), diaryDto);
             return new ResponseEntity(HttpStatus.CREATED);
         } catch (UnsupportedAudioFileException e) {
-            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return new ResponseEntity(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (IOException e) {
-            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            e.printStackTrace();
+            return new ResponseEntity(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         } catch (DataIntegrityViolationException e) {
             // 오늘 이미 일기 등록함
             return new ResponseEntity(HttpStatus.CONFLICT);
