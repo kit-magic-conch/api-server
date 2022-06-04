@@ -18,6 +18,9 @@ public class DiaryDto {
     @NotNull
     private MultipartFile voice;
 
+    @NotBlank
+    private String voiceDuration;
+
     private MultipartFile photo;
 
     @NotBlank(groups = UpdateValidationGroup.class)

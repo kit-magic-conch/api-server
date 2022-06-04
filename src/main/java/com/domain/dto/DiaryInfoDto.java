@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class DiaryInfoDto {
     private Long diaryId;
     private Long voiceId;
-    private Double voiceDuration;
+    private Integer voiceDuration;
     private Long photoId;
     private String text;
     private PrivacyType privacy;

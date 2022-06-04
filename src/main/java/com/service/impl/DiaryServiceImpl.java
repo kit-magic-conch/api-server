@@ -66,11 +66,10 @@ public class DiaryServiceImpl implements DiaryService {
         MediaFile photo = createMediaFile(diaryDto.getPhoto(), FileType.PHOTO);
 
         File voiceFile = Paths.get(customProperty.getFileSavePath(), voice.getUuid(), voice.getFileName()).toFile();
-
-        AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(voiceFile);
-        double voiceDuration = audioInputStream.getFrameLength() / audioInputStream.getFormat().getFrameRate();
-
         EmotionRecogType emotionRecogResult = getEmotionRecogResultFromModelServer(voiceFile);
+
+        String[] voiceDurationStr = diaryDto.getVoiceDuration().split(":");
+        int voiceDuration = Integer.valueOf(voiceDurationStr[0]) * 60 + Integer.valueOf(voiceDurationStr[1]);
 
         Diary diary = Diary.builder()
                 .account(accountRepository.findById(accountId).get())
