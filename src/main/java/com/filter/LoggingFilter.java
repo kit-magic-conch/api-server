@@ -48,9 +48,11 @@ public class LoggingFilter extends OncePerRequestFilter {
             sb.append("session: ").append(session.getId()).append('\n');
         }
 
-        String payload = StreamUtils.copyToString(requestToUse.getInputStream(), StandardCharsets.UTF_8);
-        if (StringUtils.hasLength(payload)) {
-            sb.append("payload: ").append(payload);
+        if (!contentType.startsWith("multipart")) {
+            String payload = StreamUtils.copyToString(requestToUse.getInputStream(), StandardCharsets.UTF_8);
+            if (StringUtils.hasLength(payload)) {
+                sb.append("payload: ").append(payload);
+            }
         }
 
         log.debug(sb.toString());
